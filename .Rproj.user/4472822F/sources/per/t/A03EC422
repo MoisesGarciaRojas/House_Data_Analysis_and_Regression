@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1534885291542.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "A03EC422",
+    "lastKnownWriteTime" : 1534885316,
+    "last_content_update" : 1534885316635,
+    "path" : "~/GitHub/House_Data_Analysis_and_Regression/Analysis.R",
+    "project_path" : "Analysis.R",
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
