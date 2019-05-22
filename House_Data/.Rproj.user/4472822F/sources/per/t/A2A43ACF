@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1478014259410.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3211292899",
+    "id" : "A2A43ACF",
+    "lastKnownWriteTime" : 1478375930,
+    "last_content_update" : 1478375930683,
+    "path" : "~/JACOBS/1 - Primer semestre/Principles of Statistical Modeling/Miniquiz-3/PSM_MQ_3/MQ3.R",
+    "project_path" : "MQ3.R",
+    "properties" : {
+        "cursorPosition" : "226,0",
+        "scrollLine" : "201"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

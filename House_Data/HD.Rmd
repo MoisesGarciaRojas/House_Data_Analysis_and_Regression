@@ -1,0 +1,164 @@
+---
+title: "House Prices in King County, Washington"
+author: "Moises Daniel Garcia Rojas"
+date: "May 21, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r libraries, include=FALSE, echo=FALSE}
+library(MASS)
+library(car)
+library(DAAG)
+```
+
+
+## Introduction
+
+Economic theory tells us that house prices are based on a variety of features. The file (kc house data.csv) contains a data set with house sale prices for homes in King County, Washington that were sold between May 2014 and May 2015. King County has its seat in Seattle and it is the most populous county in Washington, and the 13th-most populous in the United States.
+
+The data set comprises 19 different features. The general goal is to predict house prices (price) using all the available predictors, except the case identifying information (i.e. id, date).
+
+
+### Data Overview
+Variables: Description of variables:
+
+* price : price of home in USD
+* bedrooms: number of bedrooms in home
+* bathrooms: number of bathrooms in home
+* sqft living: living aerea (in sq.ft)
+* sqft lot: lot size of the house (in sq.ft)
+* floors: number of floors
+* waterfront: Waterfront dummy variable (= 1 if home is at Waterfront; 0 other-wise)
+* view: Scenic view dummy variable (= 1 if home has a scenic view; 0 otherwise)
+* condition: condition of home
+* grade: Classification by construction quality which refers to the types of materials used and the quality of workmanship, higher grade = higher quality
+* sqft basement: size of the basement
+* sqft above: sqft above = sqft living - sqft basement
+* yr built: year in which house was built
+* yr renovated: year in which house was renovated for the last time, `0' indicating that no major renovation took place
+* zipcode: ZIP code
+* lat: geographic latitude of location
+* long: geographic longitude of location
+* sqft living15: the average house square footage of the 15 closest houses
+* sqft lot15: the average lot square footage of the 15 closest houses
+
+```{r loadData, include=FALSE}
+dataset <- read.csv("kc_house_data.csv")
+houseData <- subset(dataset, select = c("price","bedrooms","bathrooms","sqft_living","sqft_lot","floors","waterfront","view","condition","grade","sqft_above","sqft_basement","yr_built","yr_renovated","zipcode","lat","long","sqft_living15","sqft_lot15"))
+```
+
+
+### Summary statistics for house prices
+
+Bellow, the statistics tell us that the dataset has a house with a minimum price of 75,000 USD, and a house with a maximum value of 7,700,000 USD, with a median value in prices equal to 450,000 USD, and mean value of 540,100 USD with a standard deviation of ± 367,127.2 USD.
+```{r houses}
+summary(houseData$price)
+sd(houseData$price)
+```
+
+
+### Data split
+Data is partitioned in 80% training and 20% testing.
+
+The whole dataset contains 21,613 observations and 19 attributes, while the training set has 17,290, and the test set 4,323 observations.
+
+```{r dataSplit, include=FALSE}
+smp_size <- floor(0.80 * nrow(houseData))
+set.seed(20161101)
+train_sample <- sample(seq_len(nrow(houseData)), size = smp_size)
+house.Train <- houseData[train_sample, ]
+house.Test <- houseData[-train_sample, ]
+```
+```{r dataDimensions}
+dim(houseData)
+dim(house.Train)
+dim(house.Test)
+```
+
+
+###Statistical Modeling
+
+#### Summary statistics for training and test sets
+
+As shown bellow, the “training set” constains a house with the minimum price of 75,000 USD, a house with a maximum value of 7,700,000 USD, with a median value in prices equal to 450,000, mean of 540,400 USD, and a standard deviation of ± 372,395.9 USD.
+
+The evaluation set contains a house with the minimum price of 95,000 USD, a house with a maximum value of 5,300,000 USD, a median equal to 455,000 USD, a mean of 539,000 USD, and a standard deviation of ± 345,291.1 USD.
+
+
+Summary for the Training set
+```{r housesTrain}
+# Summary for Training set
+summary(house.Train$price)
+sd(house.Train$price)
+```
+Summary for the Test set
+```{r housesTest}
+  # Summary for Test set
+summary(house.Test$price)
+sd(house.Test$price)
+```
+
+#### Fitting a linear regression model
+
+The model is moderately adjusted as indicated by the R-squared, which means that the model explains about 69.9 % of the variability in house prices.
+For the predictor floor we can’t reject the null hypothesis, because the value of the standard error (4.090e+03) is in the same range as the coefficient (5.500e+03), therefore its t-value is 1.787. Even though the t value is not 0, assuming the Null hypothesis for floor and by looking at the p-value we know that we could obtain the observed difference or more in 17.87% of times due to random sampling error.
+
+```{r linearReg}
+hPrice.Tr.lm <- lm(price~., data=house.Train)
+summary(hPrice.Tr.lm)
+```
+
+#### Automatic forward/backward selection method
+
+The stepAIC in the backward/forward strategy has a score of 422843.1 for the best model. The significant predictors at 5% level are the following: sqft_living, lat, view, grade, yr_built, waterfront, bedrooms, bathrooms, zipcode, long, condition, sqft_above, sqft_lot15,  sqft_living15, yr_renovated and sqft_lot. The strategy removes Floors and sqft_basement. The AIC of the best resulting model is 422843.1 compared to 443583.3 of the starting model. The best model presents an improvement of 4.9 %.
+
+```{r stepAIC.1, results=FALSE}
+hPrice.null <- lm(price~ 1, data=house.Train) 
+housing.best <- stepAIC(hPrice.null, scope=list(upper=hPrice.Tr.lm, lower=hPrice.null), direction="both")
+```
+```{r stepAIC.2}
+summary(housing.best)
+```
+
+#### Residuals' effects
+
+```{r residuals, echo=FALSE}
+par(mfrow=c(3, 3))
+crPlots(housing.best, line = TRUE, smooth = TRUE)
+```
+
+#### The one-standard-error rule and 5-folds cross-validation
+
+Three predictors were selected for which non-linear effects seem to be existent. For each of them separately, polynomials were added up to degree 5 to the "best" model. 5-fold cross validation was run to evaluate which higher order polynomial of the three predictors should be included in the final model. Bellow is shown a plot of the mean squared errors of the cross-valdiation results against complexity of the model. The MSE and the one-standard-error rule were implemented to decide which higher order polynomials to include.
+
+"sqft_living", "bathrooms", and "sqft_above" are considered to add the polynomials.
+As shown in the code bellow, the poynomials are added in an orderly manner. The MSEs are stored in the MSE.Ply variable list, with that list we can find the order of the polynoial.
+```{r polynomials.1, results=FALSE}
+#vector to save the MSE of each CV for each Polynomial
+MSE.Ply <- rep(0, 125)
+folds <- 5
+
+for(i in 1:5){
+  for(j in 1:5){
+    for(k in 1:5){
+      #Linear model for all the polynomials of "sqft_living", "bathrooms", "sqft_above" 
+      lm.Poly <- lm(price ~. - floors - sqft_basement + poly(sqft_living, i) + poly(bathrooms, j) + poly(sqft_above, k), data=houseData)
+      cv.Poly <- cv.lm(houseData, lm.Poly, m = folds, plotit = FALSE)
+      #Save MSE of each polynomial for the three selected predictors for ploting (in order)
+      MSE.Ply[((i-1)*25) + ((j-1)*5) + k] <- attr(cv.Poly,"ms")
+      #Delay in system to allow R finishing cross validation before continuing with the next
+      Sys.sleep(taken.time)
+    }
+  }
+}
+```
+```{r polynomials.2}
+#Obtain index of minimum MSE
+which.min(MSE.Ply)
+
+#Get MSE of the CV with the minimum value
+MSE.min <- MSE.Ply[which.min(MSE.Ply)]
+```
