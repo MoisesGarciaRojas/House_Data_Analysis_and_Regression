@@ -1,0 +1,3 @@
+"0","train.control <- trainControl(method = ""cv"", number = 5)"
+"0","# Train the model"
+"0","cv.simple <- train(price ~. - floors - sqft_basement + sqft_living + bathrooms + sqft_above^2, data=house.Train, method = ""lm"", trControl = train.control)"

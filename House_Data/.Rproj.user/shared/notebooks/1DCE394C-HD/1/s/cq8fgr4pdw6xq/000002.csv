@@ -1,0 +1,21 @@
+"0","library(MASS)"
+"0","library(car)"
+"2","Loading required package: carData
+"
+"0","library(DAAG)"
+"2","Loading required package: lattice
+"
+"2","
+Attaching package: ‘DAAG’
+
+"
+"2","The following object is masked from ‘package:car’:
+
+    vif
+
+"
+"2","The following object is masked from ‘package:MASS’:
+
+    hills
+
+"

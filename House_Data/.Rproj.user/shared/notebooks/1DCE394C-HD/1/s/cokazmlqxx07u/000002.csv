@@ -1,0 +1,8 @@
+"0","#Obtain index of minimum MSE"
+"0","which.min(MSE.Ply)"
+"1","[1]"
+"1"," 31"
+"1","
+"
+"0","#Get MSE of the CV with the minimum value"
+"0","MSE.min <- MSE.Ply[which.min(MSE.Ply)]"
