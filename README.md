@@ -34,7 +34,7 @@ Variable description:
 
 ### Summary statistics for house prices
 
-Bellow, the statistics tell us that the dataset has a house with a minimum price of 75,000 USD, and a house with a maximum value of 7,700,000 USD, with a median value in prices equal to 450,000 USD, and mean value of 540,100 USD with a standard deviation of ± 367,127.2 USD.
+Bellow, the statistics tell us that the dataset has a house with a minimum price of 75,000 USD, and a house with a maximum value of 7,700,000 USD, with a median value in prices equal to 450,000 USD, and mean value of 540,088 USD with a standard deviation of ± 367,127.2 USD.
 <pre class="r">
 <code class="hljs">summary(houseData$price)</code>
 </pre>
