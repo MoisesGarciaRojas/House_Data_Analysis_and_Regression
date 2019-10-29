@@ -31,14 +31,3 @@ Variable description:
 * long: geographic longitude of location
 * sqft living15: the average house square footage of the 15 closest houses
 * sqft lot15: the average lot square footage of the 15 closest houses
-
-### Summary statistics for house prices
-
-Bellow, the statistics tell us that the dataset has a house with a minimum price of 75,000 USD, and a house with a maximum value of 7,700,000 USD, with a median value in prices equal to 450,000 USD, and mean value of 540,088 USD with a standard deviation of ± 367,127.2 USD.
-<pre class="r">
-<code class="hljs">summary(houseData$price)</code>
-</pre>
-<pre><code class="hljs">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   75000  321950  450000  540088  645000 7700000</code></pre>
-<pre class="r"><code class="hljs">sd(houseData$price)</code></pre>
-<pre><code class="hljs">## [1] 367127.2</code></pre>
