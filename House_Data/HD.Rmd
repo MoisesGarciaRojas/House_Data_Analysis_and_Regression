@@ -196,7 +196,7 @@ SE.MSEk.31
 # Plot crossvalidations' MSE and the SD from the lowest MSE
 Poly.list <- (1:125)
 par(mfrow=c(1,1))
-plot(Poly.list,MSE.Ply, type = "o", col = "chocolate1", lwd = 2, main= "5-fold CV for all possible polynomials", xlab = "Polynomial Index", ylab = "Mean Squared Error")
+plot(Poly.list,MSE.Ply, type = "o", col = "chocolate1", lwd = 2, main= "5-fold CV for the polynomials", xlab = "Polynomial Index", ylab = "Mean Squared Error")
 abline(as.numeric(MSE.min + SE.MSEk.31), b = 0,col = "red", lwd = 2)
 ```
 
